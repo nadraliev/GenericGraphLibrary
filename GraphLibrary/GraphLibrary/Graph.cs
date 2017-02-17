@@ -18,7 +18,12 @@ namespace GraphLibrary
             }
         }
 
-        public E[,] Edges { get; }
+        public E[,] Edges {
+            get
+            {
+                return edges;
+            }
+        }
 
         public Graph() {}
         public Graph(IList<V> vertexes) { this.vertexes = vertexes; edges = new E[vertexes.Count, vertexes.Count]; }
@@ -26,8 +31,13 @@ namespace GraphLibrary
 
         public void AddVertex(V vertex)
         {
+            if (vertexes == null)
+                vertexes = new List<V>();
             vertexes.Add(vertex);
-            edges = ArraysUtils.ResizeArray<E>(edges, edges.GetLength(0) + 1, edges.GetLength(1) + 1);
+            if (edges == null)
+                edges = new E[1,1];
+            else
+                edges = ArraysUtils.ResizeArray<E>(edges, edges.GetLength(0) + 1, edges.GetLength(1) + 1);
         }
 
         public void RemoveVertexAt(int index)
@@ -50,7 +60,7 @@ namespace GraphLibrary
 
         public bool IsEdgeSet(int from, int to)
         {
-            return edges[from, to].Equals(default(E));
+            return !edges[from, to].Equals(default(E));
         }
 
         public void ClearGraph()
@@ -62,14 +72,14 @@ namespace GraphLibrary
         public override string ToString()
         {
             string result = String.Empty;
-            result += vertexes.GetType().Name;
+            result += "vertexes:" + Environment.NewLine;
             vertexes.ToList<V>().ForEach(x => result += x.ToString() + " ");
-            result += Environment.NewLine + edges.GetType().Name;
+            result += Environment.NewLine + "edges:";
             for (int i = 0; i < edges.GetLength(0); i++)
             {
-                result += Environment.NewLine;
                 for (int k = 0; k < edges.GetLength(1); k++)
-                    result += i + "," + k + ":" + edges[i,k].ToString() + " ";
+                    if (IsEdgeSet(i,k))
+                        result += Environment.NewLine + i + "," + k + ":" + edges[i,k].ToString() + " ";
             }
             return result;
         }
