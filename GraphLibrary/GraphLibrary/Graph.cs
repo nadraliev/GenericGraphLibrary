@@ -10,19 +10,19 @@ namespace GraphLibrary
         private IList<V> vertexes;
         private E[,] edges;
 
+        public V[] Vertexes
+        {
+            get
+            {
+                return vertexes.ToArray<V>();
+            }
+        }
+
+        public E[,] Edges { get; }
+
         public Graph() {}
         public Graph(IList<V> vertexes) { this.vertexes = vertexes; edges = new E[vertexes.Count, vertexes.Count]; }
         public Graph(IList<V> vertexes, E[,] edges) { this.vertexes = vertexes; this.edges = edges; }
-
-        public V GetVertexAt(int index)
-        {
-            return vertexes[index];
-        }
-
-        public void SetVertexAt(int index, V vertex)
-        {
-            vertexes[index] = vertex;
-        }
 
         public void AddVertex(V vertex)
         {
@@ -35,16 +35,6 @@ namespace GraphLibrary
             vertexes[index] = default(V);
             edges = ArraysUtils.TrimArray(index, index, edges);
         } 
-
-        public E GetEdge(int from, int to)
-        {
-            return edges[from, to];
-        }
-
-        public void SetEdge(int from, int to, E edge)
-        {
-            edges[from, to] = edge;
-        }
 
         public void ClearEdge(int from, int to)
         {
